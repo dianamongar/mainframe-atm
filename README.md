@@ -78,7 +78,11 @@ mvn exec:java -Dexec.mainClass="bo.edu.ucb.sis213.App"
 ```
 docker run --name mysql-atm -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql:8
 ```
+Para hacer correr el contenedor:
 
+```
+docker start mysql-atm
+```
 2. Me conecto a la BBDD (Le pedira password es 123456)
 
 ```
