@@ -39,4 +39,27 @@ public class Usuario {
         }
         return new Usuario(null,null,0,0,0);
     }
+    public void consultarSaldo(Connection connection, double monto){
+        String query = "SELECT saldo FROM usuarios WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, this.id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+                
+            if (resultSet.next()) {
+                saldo = resultSet.getDouble("saldo");
+
+                String updateQueryHist = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'consultaSaldo', ?)"; // Cambia esto según tu tabla
+                PreparedStatement preparedStatementHist = connection.prepareStatement(updateQueryHist);
+                preparedStatementHist.setInt(1, this.id);
+                preparedStatementHist.setDouble(2, monto);
+                preparedStatementHist.executeUpdate();  
+
+                System.out.println("Su saldo actual es: $" + saldo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -59,7 +59,7 @@ public class MenuPrincipal extends JFrame {
         btnConsultaSaldo.addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(ActionEvent e) {
-					Consulta consultaFrame = new Consulta();
+					Consulta consultaFrame = new Consulta(connection,usuario);
 				    consultaFrame.setVisible(true);
             }
 		});
