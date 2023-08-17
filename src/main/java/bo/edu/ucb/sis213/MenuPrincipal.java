@@ -45,7 +45,8 @@ public class MenuPrincipal extends JFrame {
         btnDeposito.addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(ActionEvent e) {
-					Deposito depositoFrame = new Deposito();
+					dispose();
+					Deposito depositoFrame = new Deposito(connection, usuario);
 					depositoFrame.setVisible(true);
             }
 		});
@@ -59,6 +60,7 @@ public class MenuPrincipal extends JFrame {
         btnConsultaSaldo.addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(ActionEvent e) {
+					dispose();
 					Consulta consultaFrame = new Consulta(connection,usuario);
 				    consultaFrame.setVisible(true);
             }
@@ -99,8 +101,6 @@ public class MenuPrincipal extends JFrame {
 			@Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-				MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection,usuario);
-				menuPrincipalFrame.setVisible(true);
             }
 		});
 	}

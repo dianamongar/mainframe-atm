@@ -7,17 +7,23 @@ import javax.swing.border.EmptyBorder;
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.Color;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 public class Deposito extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField cant_depositada;
 
-	public Deposito() {
+	public Deposito(Connection connection, Usuario usuario) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 355);
 		contentPane = new JPanel();
@@ -35,11 +41,6 @@ public class Deposito extends JFrame {
 		atm_montero.setBounds(228, 4, 155, 29);
 		contentPane.add(atm_montero);
 		
-		JButton btnAceptar = new JButton("Aceptar");
-		btnAceptar.setBackground(new Color(143, 188, 143));
-		btnAceptar.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnAceptar.setBounds(174, 213, 98, 37);
-		contentPane.add(btnAceptar);
 		
 		JLabel lb_desposito = new JLabel("Deposito");
 		lb_desposito.setFont(new Font("Tahoma", Font.PLAIN, 22));
@@ -62,6 +63,42 @@ public class Deposito extends JFrame {
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnCancelar.setBounds(307, 213, 113, 37);
 		contentPane.add(btnCancelar);
+
+		btnCancelar.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+				dispose();
+				MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
+				menuPrincipalFrame.setVisible(true);
+            }
+		});
+
+		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.setBackground(new Color(143, 188, 143));
+		btnAceptar.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnAceptar.setBounds(174, 213, 98, 37);
+		contentPane.add(btnAceptar);
+
+		btnAceptar.addActionListener(new ActionListener() {
+			double mon=0;
+			@Override
+            public void actionPerformed(ActionEvent e) {
+				if(cant_depositada!=null){
+					mon= Double.parseDouble(cant_depositada.getText());
+				}
+					if(usuario.depositar(connection, mon)){
+						JOptionPane.showMessageDialog(null, "Depósito realizado con éxito!"+"su saldo actual es: "+usuario.saldo);
+						dispose();
+						MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
+						menuPrincipalFrame.setVisible(true);
+						
+					}else{
+						JOptionPane.showMessageDialog(null, "No se pudo realizar el depósito :(");
+					}
+					//depositoFrame.setVisible(true);
+				}
+			});
+		
 		
 		JSeparator separator_down = new JSeparator();
 		separator_down.setBounds(54, 279, 493, 13);
