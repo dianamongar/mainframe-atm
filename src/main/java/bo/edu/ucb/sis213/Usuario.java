@@ -127,4 +127,43 @@ public class Usuario {
         }
         return false;
     }
+    public boolean confirmarPassword(Connection connection, int pinIngresado){
+        if(this.password==pinIngresado){
+            return true;
+        }
+        return false;
+    }
+    public int cambiarPassword(Connection connection, int nuevoPin, int confirmacionPin){
+            if (nuevoPin == confirmacionPin) {
+                //pinActual = nuevoPin;
+                //System.out.println("PIN actualizado con éxito.");
+                try {
+                    String updateQuery = "UPDATE usuarios SET pin = ? WHERE id = ?"; // Cambia esto según tu tabla
+                    PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
+                    preparedStatement.setInt(1, nuevoPin);
+                    preparedStatement.setInt(2, this.id); // Cambia el valor según el ID de la cuenta
+    
+                    String updateQueryHist = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'cambioPin', ?)"; // Cambia esto según tu tabla
+                    PreparedStatement preparedStatementHist = connection.prepareStatement(updateQueryHist);
+                    preparedStatementHist.setInt(1, this.id);
+                    preparedStatementHist.setInt(2, nuevoPin);
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    int rowsHist = preparedStatementHist.executeUpdate();
+                    if (rowsAffected + rowsHist > 0) {
+                        this.password=nuevoPin;
+                        System.out.println("Cambio de pin realizado con éxito. Su pin ha sido actualizado.");
+                        return 1;
+                    } else {
+                        System.out.println("No se pudo realizar el cambio de pin.");
+                        return 2;
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error al realizar el cambio de pin: " + e.getMessage());
+                    return 2;
+                }
+            } else {
+                System.out.println("Los PINs no coinciden.");
+                return 3;
+            }
+        }
 }

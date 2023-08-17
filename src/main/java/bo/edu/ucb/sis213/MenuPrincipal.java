@@ -74,8 +74,9 @@ public class MenuPrincipal extends JFrame {
         btnCambioContrasea.addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(ActionEvent e) {
-					CambioPassword cambioPasswordFrame = new CambioPassword();
-					cambioPasswordFrame.setVisible(true);
+				dispose();
+					ConfirmacionPassword confPasswordFrame = new ConfirmacionPassword(connection, usuario);
+					confPasswordFrame.setVisible(true);
             }
 		});
 		
@@ -87,6 +88,7 @@ public class MenuPrincipal extends JFrame {
         btnRetiro.addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(ActionEvent e) {
+				dispose();
 					Retiro retiroFrame = new Retiro(usuario, connection);
 					retiroFrame.setVisible(true);
             }

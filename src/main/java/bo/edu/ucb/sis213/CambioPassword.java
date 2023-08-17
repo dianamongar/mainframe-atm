@@ -7,10 +7,16 @@ import javax.swing.border.EmptyBorder;
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.Color;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 public class CambioPassword extends JFrame {
 
@@ -18,7 +24,7 @@ public class CambioPassword extends JFrame {
 	private JTextField nuevo_pass;
 	private JTextField confir_pass;
 
-	public CambioPassword() {
+	public CambioPassword(Connection connection, Usuario usuario) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 355);
 		contentPane = new JPanel();
@@ -73,10 +79,36 @@ public class CambioPassword extends JFrame {
 		confir_pass.setColumns(10);
 		confir_pass.setBounds(242, 147, 195, 27);
 		contentPane.add(confir_pass);
+
+		
 		
 		JLabel lb_conf_pass = new JLabel("Confirme contrase\u00F1a:");
 		lb_conf_pass.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lb_conf_pass.setBounds(89, 153, 143, 19);
 		contentPane.add(lb_conf_pass);
+
+		btnAceptar.addActionListener(new ActionListener() {
+
+			@Override
+            public void actionPerformed(ActionEvent e) {
+                int contra = Integer.parseInt(nuevo_pass.getText());
+				int contraconf = Integer.parseInt(confir_pass.getText());
+				int res = usuario.cambiarPassword(connection, contra, contraconf);
+				if(res == 1){
+					JOptionPane.showMessageDialog(null, "Se ha cambiado correctamente su password.");
+					dispose();
+					MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
+					menuPrincipalFrame.setVisible(true);
+				}else{
+					if(res == 2){
+						JOptionPane.showMessageDialog(null, "No se pudo realizar el cambio de password.");
+					}else{
+						JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden :(");
+					}
+					
+				}
+                
+            }
+		});
 	}
 }
