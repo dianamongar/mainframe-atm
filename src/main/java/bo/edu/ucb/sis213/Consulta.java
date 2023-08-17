@@ -78,6 +78,7 @@ public class Consulta extends JFrame {
 		btnAceptar.addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(ActionEvent e) {
+				dispose();
 					MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
 					menuPrincipalFrame.setVisible(true);
             }

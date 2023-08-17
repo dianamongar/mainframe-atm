@@ -96,4 +96,35 @@ public class Usuario {
         }
         return false;
     }
+    public boolean retirar(Connection connection, double monto){
+        if (monto <= 0) {
+            System.out.println("Cantidad no válida.");
+        } else if (monto > saldo) {
+            System.out.println("Saldo insuficiente.");
+        } else {
+            try {
+                String updateQuery = "UPDATE usuarios SET saldo = saldo - ? WHERE id = ?"; // Cambia esto según tu tabla
+                PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
+                preparedStatement.setDouble(1, monto);
+                preparedStatement.setInt(2, this.id); // Cambia el valor según el ID de la cuenta
+
+                String updateQueryHist = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'retiro', ?)"; // Cambia esto según tu tabla
+                PreparedStatement preparedStatementHist = connection.prepareStatement(updateQueryHist);
+                preparedStatementHist.setInt(1, this.id);
+                preparedStatementHist.setDouble(2, monto);
+                int rowsAffected = preparedStatement.executeUpdate();
+                int rowsHist = preparedStatementHist.executeUpdate();
+                if (rowsAffected + rowsHist > 0) {
+                    this.saldo -= monto;
+                    System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + this.saldo);
+                    return true;
+                } else {
+                    System.out.println("No se pudo realizar el retiro.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al realizar el retiro: " + e.getMessage());
+            }
+        }
+        return false;
+    }
 }

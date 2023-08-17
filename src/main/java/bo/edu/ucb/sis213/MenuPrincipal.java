@@ -87,7 +87,7 @@ public class MenuPrincipal extends JFrame {
         btnRetiro.addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(ActionEvent e) {
-					Retiro retiroFrame = new Retiro();
+					Retiro retiroFrame = new Retiro(usuario, connection);
 					retiroFrame.setVisible(true);
             }
 		});
