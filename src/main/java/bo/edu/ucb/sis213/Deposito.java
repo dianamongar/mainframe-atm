@@ -83,18 +83,25 @@ public class Deposito extends JFrame {
 			double mon=0;
 			@Override
             public void actionPerformed(ActionEvent e) {
-				if(cant_depositada!=null){
+				if(cant_depositada.getText()!=null){
 					mon= Double.parseDouble(cant_depositada.getText());
-				}
-					if(usuario.depositar(connection, mon)){
+					if(mon>0){
+						if(usuario.depositar(connection, mon)){
 						JOptionPane.showMessageDialog(null, "Depósito realizado con éxito!"+"su saldo actual es: "+usuario.saldo);
 						dispose();
 						MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
 						menuPrincipalFrame.setVisible(true);
 						
+						}else{
+							JOptionPane.showMessageDialog(null, "No se pudo realizar el depósito :(");
+						}
 					}else{
-						JOptionPane.showMessageDialog(null, "No se pudo realizar el depósito :(");
+						JOptionPane.showMessageDialog(null, "Cantidad no válida :(");
 					}
+				}else{
+					JOptionPane.showMessageDialog(null, "Ingrese cantidad a depositar.");
+				}
+					
 					//depositoFrame.setVisible(true);
 				}
 			});

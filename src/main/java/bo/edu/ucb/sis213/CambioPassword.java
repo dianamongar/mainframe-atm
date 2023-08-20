@@ -69,6 +69,15 @@ public class CambioPassword extends JFrame {
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnCancelar.setBounds(307, 213, 113, 37);
 		contentPane.add(btnCancelar);
+
+		btnCancelar.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+				dispose();
+				MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
+				menuPrincipalFrame.setVisible(true);
+            }
+		});
 		
 		JSeparator separator_down = new JSeparator();
 		separator_down.setBounds(54, 279, 493, 13);
@@ -82,7 +91,7 @@ public class CambioPassword extends JFrame {
 
 		
 		
-		JLabel lb_conf_pass = new JLabel("Confirme contrase\u00F1a:");
+		JLabel lb_conf_pass = new JLabel("Confirmación:");
 		lb_conf_pass.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lb_conf_pass.setBounds(89, 153, 143, 19);
 		contentPane.add(lb_conf_pass);
@@ -91,22 +100,28 @@ public class CambioPassword extends JFrame {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-                int contra = Integer.parseInt(nuevo_pass.getText());
-				int contraconf = Integer.parseInt(confir_pass.getText());
-				int res = usuario.cambiarPassword(connection, contra, contraconf);
-				if(res == 1){
-					JOptionPane.showMessageDialog(null, "Se ha cambiado correctamente su password.");
-					dispose();
-					MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
-					menuPrincipalFrame.setVisible(true);
-				}else{
-					if(res == 2){
-						JOptionPane.showMessageDialog(null, "No se pudo realizar el cambio de password.");
+				int contra, contraconf;
+				if(nuevo_pass.getText()!=null && confir_pass.getText()!=null){
+					contra = Integer.parseInt(nuevo_pass.getText());
+					contraconf = Integer.parseInt(confir_pass.getText());
+					int res = usuario.cambiarPassword(connection, contra, contraconf);
+					if(res == 1){
+						JOptionPane.showMessageDialog(null, "Se ha cambiado correctamente su password.");
+						dispose();
+						MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
+						menuPrincipalFrame.setVisible(true);
 					}else{
-						JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden :(");
+						if(res == 2){
+							JOptionPane.showMessageDialog(null, "No se pudo realizar el cambio de password.");
+						}else{
+							JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden :(");
+						}
+						
 					}
-					
+				}else{
+					JOptionPane.showMessageDialog(null, "Complete los campos.");
 				}
+                
                 
             }
 		});

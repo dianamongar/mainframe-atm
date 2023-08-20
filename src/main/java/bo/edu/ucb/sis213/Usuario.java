@@ -96,11 +96,13 @@ public class Usuario {
         }
         return false;
     }
-    public boolean retirar(Connection connection, double monto){
+    public int retirar(Connection connection, double monto){
         if (monto <= 0) {
             System.out.println("Cantidad no válida.");
+            return 1;
         } else if (monto > saldo) {
             System.out.println("Saldo insuficiente.");
+            return 2;
         } else {
             try {
                 String updateQuery = "UPDATE usuarios SET saldo = saldo - ? WHERE id = ?"; // Cambia esto según tu tabla
@@ -117,15 +119,16 @@ public class Usuario {
                 if (rowsAffected + rowsHist > 0) {
                     this.saldo -= monto;
                     System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + this.saldo);
-                    return true;
+                    return 3;
                 } else {
                     System.out.println("No se pudo realizar el retiro.");
+                    return 4;
                 }
             } catch (SQLException e) {
                 System.out.println("Error al realizar el retiro: " + e.getMessage());
             }
         }
-        return false;
+        return 4;
     }
     public boolean confirmarPassword(Connection connection, int pinIngresado){
         if(this.password==pinIngresado){

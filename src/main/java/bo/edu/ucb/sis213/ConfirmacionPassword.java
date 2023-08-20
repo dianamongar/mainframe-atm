@@ -58,30 +58,51 @@ public class ConfirmacionPassword extends JFrame {
 		
 		JLabel lb_atm_montero = new JLabel("Introduzca su pin actual");
 		lb_atm_montero.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		lb_atm_montero.setBounds(233, 32, 154, 25);
+		lb_atm_montero.setBounds(133, 32, 354, 25);
 		contentPane.add(lb_atm_montero);
 
         
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.setBackground(new Color(240, 128, 128));
+		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnCancelar.setBounds(307, 253, 113, 37);
+		contentPane.add(btnCancelar);
+
+		btnCancelar.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+				dispose();
+				MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
+				menuPrincipalFrame.setVisible(true);
+            }
+		});
+
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setBackground(new Color(143, 188, 143));
 		btnAceptar.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnAceptar.setBounds(250, 253, 98, 37);
-		contentPane.add(btnAceptar);
+		btnAceptar.setBounds(174, 253, 98, 37);
+		contentPane.add(btnAceptar); 
 
         btnAceptar.addActionListener(new ActionListener() {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
                 String us = textField_user.getText();
-                int contra = Integer.parseInt(textField_password.getText());
-				if(usuario.confirmarPassword(connection, contra) ){
-					JOptionPane.showMessageDialog(null, "Contraseña correcta! Ahora puede cambiar su pin.");
-					dispose();
-					CambioPassword cambioPasswordFrame = new CambioPassword(connection, usuario);
-					cambioPasswordFrame.setVisible(true);
+                int contra=0;
+				if(textField_password.getText()!=null){
+					contra = Integer.parseInt(textField_password.getText());
+					if(usuario.confirmarPassword(connection, contra) ){
+						JOptionPane.showMessageDialog(null, "Contraseña correcta! Ahora puede cambiar su pin.");
+						dispose();
+						CambioPassword cambioPasswordFrame = new CambioPassword(connection, usuario);
+						cambioPasswordFrame.setVisible(true);
+					}else{
+						JOptionPane.showMessageDialog(null, "Contraseña incorrecta :(");
+					}
 				}else{
-					JOptionPane.showMessageDialog(null, "Contraseña incorrecta :(");
+					JOptionPane.showMessageDialog(null, "Ingrese su contraseña.");
 				}
+				
                 
             }
 		});

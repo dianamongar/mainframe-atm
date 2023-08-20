@@ -103,6 +103,8 @@ public class MenuPrincipal extends JFrame {
 			@Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
+				Login loginFrame = new Login(connection);
+				loginFrame.setVisible(true);
             }
 		});
 	}

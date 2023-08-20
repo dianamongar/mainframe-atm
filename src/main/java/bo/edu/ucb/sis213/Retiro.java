@@ -82,18 +82,30 @@ public class Retiro extends JFrame {
 			double mon=0;
 			@Override
             public void actionPerformed(ActionEvent e) {
-				if(cant_retirada!=null){
+				if(cant_retirada.getText()!=""){
 					mon= Double.parseDouble(cant_retirada.getText());
-				}
-					if(usuario.retirar(connection, mon)){
+					if(mon>0){
+						int res=usuario.retirar(connection, mon);
+						if(res==3){
 						JOptionPane.showMessageDialog(null, "Retiro realizado con éxito!"+"su saldo actual es: "+usuario.saldo);
 						dispose();
 						MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
 						menuPrincipalFrame.setVisible(true);
 						
+						}else if(res==2){
+							JOptionPane.showMessageDialog(null, "saldo insuficiente :(");
+						}else if(res==1){
+							JOptionPane.showMessageDialog(null, "Cantidad no válida :(");
+						}else {
+							JOptionPane.showMessageDialog(null, "No se pudo realizar el retiro :(");
+						}
 					}else{
-						JOptionPane.showMessageDialog(null, "No se pudo realizar el retiro :(");
+						JOptionPane.showMessageDialog(null, "Cantidad no válida :(");
 					}
+				}else{
+					JOptionPane.showMessageDialog(null, "Ingrese cantidad a retirar.");
+				}
+					
 					//depositoFrame.setVisible(true);
 				}
 			});
