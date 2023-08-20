@@ -23,8 +23,10 @@ public class Login extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField_user;
 	private JTextField textField_password;
+	private int intentos;
 
 	public Login(Connection connection) {
+		intentos=3;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 632, 398);
 		contentPane = new JPanel();
@@ -71,17 +73,23 @@ public class Login extends JFrame {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				Usuario temp=new Usuario(null,null,0,0,0);
-                String us = textField_user.getText();
-                int contra = Integer.parseInt(textField_password.getText());
-                temp= temp.verificarUsuario(connection, contra, us);
-				if(temp.nombre!= null){
-					dispose();
-					MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, temp);
-					menuPrincipalFrame.setVisible(true);
+				intentos--;
+				if(intentos>0){
+					Usuario temp=new Usuario(null,null,0,0,0);
+					String us = textField_user.getText();
+					int contra = Integer.parseInt(textField_password.getText());
+					temp= temp.verificarUsuario(connection, contra, us);
+					if(temp.nombre!= null){
+						dispose();
+						MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, temp);
+						menuPrincipalFrame.setVisible(true);
+					}else{
+						JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos. Le quedan "+intentos+" intentos.");
+					}
 				}else{
-					JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+					JOptionPane.showMessageDialog(null, "Número de intentos excedido :(");
 				}
+				
                 //
             }
 		});
