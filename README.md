@@ -1,5 +1,7 @@
 # Ejemplo de Cajero Automático como si fuera Mainframe.
 
+**Nota:**Para hacer funcionar el programa debe ejecutar el archivo UserInterface.java
+
 ## Funcionalidad
 
 **Práctica de Línea de Comandos: Simulación de un Cajero Automático**
