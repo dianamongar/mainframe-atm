@@ -1,5 +1,4 @@
-package bo.edu.ucb.sis213;
-
+package bo.edu.ucb.sis213.view;
 
 import java.awt.Color;
 
@@ -7,6 +6,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import bo.edu.ucb.sis213.bl.UsuarioBl;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -16,17 +18,14 @@ import java.awt.SystemColor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 
-public class Login extends JFrame {
+public class ConfirmacionPasswordView extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField_user;
 	private JTextField textField_password;
-	private int intentos;
 
-	public Login(Connection connection) {
-		intentos=3;
+	public ConfirmacionPasswordView(UsuarioBl usuarioBl) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 632, 398);
 		contentPane = new JPanel();
@@ -49,7 +48,10 @@ public class Login extends JFrame {
 		textField_user.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		textField_user.setBounds(287, 115, 168, 31);
 		contentPane.add(textField_user);
+		textField_user.setEditable(false);
 		textField_user.setColumns(10);
+
+		textField_user.setText(String.valueOf(usuarioBl.usuario.usuario));
 		
 		textField_password = new JTextField();
 		textField_password.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -57,40 +59,51 @@ public class Login extends JFrame {
 		contentPane.add(textField_password);
 		textField_password.setColumns(10);
 		
-		JLabel lb_atm_montero = new JLabel("ATM Montero");
+		JLabel lb_atm_montero = new JLabel("Introduzca su pin actual");
 		lb_atm_montero.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		lb_atm_montero.setBounds(233, 32, 154, 25);
+		lb_atm_montero.setBounds(133, 32, 354, 25);
 		contentPane.add(lb_atm_montero);
 
         
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.setBackground(new Color(240, 128, 128));
+		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnCancelar.setBounds(307, 253, 113, 37);
+		contentPane.add(btnCancelar);
+
+		btnCancelar.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+				dispose();
+				MenuPrincipalView menuPrincipalFrame = new MenuPrincipalView(usuarioBl);
+				menuPrincipalFrame.setVisible(true);
+            }
+		});
+
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setBackground(new Color(143, 188, 143));
 		btnAceptar.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnAceptar.setBounds(250, 253, 98, 37);
-		contentPane.add(btnAceptar);
+		btnAceptar.setBounds(174, 253, 98, 37);
+		contentPane.add(btnAceptar); 
 
         btnAceptar.addActionListener(new ActionListener() {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				intentos--;
-				if(intentos>0){
-					Usuario temp=new Usuario(null,null,0,0,0);
-					String us = textField_user.getText();
-					int contra = Integer.parseInt(textField_password.getText());
-					temp= temp.verificarUsuario(connection, contra, us);
-					if(temp.nombre!= null){
-						dispose();
-						MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, temp);
-						menuPrincipalFrame.setVisible(true);
-					}else{
-						JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos. Le quedan "+intentos+" intentos.");
-					}
+                int contra=0;
+				contra = Integer.parseInt(textField_password.getText());
+				int resConfirmacion = usuarioBl.confirmarPassword(contra);
+				if(resConfirmacion==1){
+					JOptionPane.showMessageDialog(null, "Ingrese su contraseña.");
+				}else if(resConfirmacion==2){
+					JOptionPane.showMessageDialog(null, "Contraseña correcta! Ahora puede cambiar su pin.");
+					dispose();
+					CambioPasswordView cambioPasswordFrame = new CambioPasswordView(usuarioBl);
+					cambioPasswordFrame.setVisible(true);
 				}else{
-					JOptionPane.showMessageDialog(null, "Número de intentos excedido :(");
+					JOptionPane.showMessageDialog(null, "Contraseña incorrecta :(");
 				}
-				
-                //
+                
             }
 		});
 

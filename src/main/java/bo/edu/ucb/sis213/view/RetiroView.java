@@ -1,9 +1,12 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.view;
 
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import bo.edu.ucb.sis213.bl.UsuarioBl;
+
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
@@ -11,19 +14,18 @@ import javax.swing.JOptionPane;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.Color;
 
-public class Retiro extends JFrame {
+public class RetiroView extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField cant_retirada;
 
-	public Retiro(Usuario usuario, Connection connection) {
+	public RetiroView(UsuarioBl usuarioBl) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 355);
 		contentPane = new JPanel();
@@ -73,7 +75,7 @@ public class Retiro extends JFrame {
 			@Override
             public void actionPerformed(ActionEvent e) {
 				dispose();
-				MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
+				MenuPrincipalView menuPrincipalFrame = new MenuPrincipalView(usuarioBl);
 				menuPrincipalFrame.setVisible(true);
             }
 		});
@@ -82,33 +84,22 @@ public class Retiro extends JFrame {
 			double mon=0;
 			@Override
             public void actionPerformed(ActionEvent e) {
-				if(cant_retirada.getText()!=""){
-					mon= Double.parseDouble(cant_retirada.getText());
-					if(mon>0){
-						int res=usuario.retirar(connection, mon);
-						if(res==3){
-						JOptionPane.showMessageDialog(null, "Retiro realizado con éxito!"+"su saldo actual es: "+usuario.saldo);
-						dispose();
-						MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
-						menuPrincipalFrame.setVisible(true);
-						
-						}else if(res==2){
-							JOptionPane.showMessageDialog(null, "saldo insuficiente :(");
-						}else if(res==1){
-							JOptionPane.showMessageDialog(null, "Cantidad no válida :(");
-						}else {
-							JOptionPane.showMessageDialog(null, "No se pudo realizar el retiro :(");
-						}
-					}else{
-						JOptionPane.showMessageDialog(null, "Cantidad no válida :(");
-					}
+				mon= Double.parseDouble(cant_retirada.getText());
+				double resultado = usuarioBl.retirar(mon);
+				if(resultado==1){
+					JOptionPane.showMessageDialog(null, "Cantidad no válida :(");
+				}else if(resultado==2){
+					JOptionPane.showMessageDialog(null, "El saldo actual es insuficiente.");
+				}else if(resultado==3){
+					JOptionPane.showMessageDialog(null, "No se pudo realizar el depósito :(");
 				}else{
-					JOptionPane.showMessageDialog(null, "Ingrese cantidad a retirar.");
+					JOptionPane.showMessageDialog(null, "Depósito realizado con éxito!"+"su saldo actual es: "+resultado+" Bs.");
+					dispose();
+					MenuPrincipalView menuPrincipalFrame = new MenuPrincipalView(usuarioBl);
+					menuPrincipalFrame.setVisible(true);
 				}
-					
-					//depositoFrame.setVisible(true);
-				}
-			});
+			}
+		});
 		
 		
 		JSeparator separator_down = new JSeparator();

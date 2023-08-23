@@ -2,36 +2,17 @@ package bo.edu.ucb.sis213;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+
+import bo.edu.ucb.sis213.dao.ConexionDao;
+import bo.edu.ucb.sis213.view.LoginView;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class UserInterface extends JFrame {
-    public Usuario usuario=new Usuario(null,null,0,0,0);
-
-    private static final String HOST = "127.0.0.1";
-    private static final int PORT = 3306;
-    private static final String USER = "root";
-    private static final String PASSWORD = "123456";
-    private static final String DATABASE = "atm";
-
-    public static Connection getConnection() throws SQLException {
-        String jdbcUrl = String.format("jdbc:mysql://%s:%d/%s", HOST, PORT, DATABASE);
-        try {
-            // Asegúrate de tener el driver de MySQL agregado en tu proyecto
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new SQLException("MySQL Driver not found.", e);
-        }
-
-        return DriverManager.getConnection(jdbcUrl, USER, PASSWORD);
-    }
-
-
 
 	public UserInterface(Connection connection) {
-        Login logueo=new Login(connection);
+        LoginView logueo=new LoginView();
         logueo.setVisible(true);
 
 		
@@ -40,7 +21,8 @@ public class UserInterface extends JFrame {
 
     public static void main(String[] args) {
             try {
-                final Connection con = getConnection();
+                new ConexionDao();
+                final Connection con = ConexionDao.getConnection();
                 EventQueue.invokeLater(new Runnable() {
                     public void run() {
                         try {

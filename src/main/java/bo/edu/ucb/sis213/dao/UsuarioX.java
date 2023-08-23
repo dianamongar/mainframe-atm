@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,20 +7,20 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-public class Usuario {
+public class UsuarioX {
     String usuario;
     String nombre;
     int password;
     double saldo;
     int id;
-    public Usuario(String usuario,String nombre, int password, double saldo, int id){
+    public UsuarioX(String usuario,String nombre, int password, double saldo, int id){
         this.usuario=usuario;
         this.nombre=nombre;
         this.password=password;
         this.saldo=saldo;
         this.id=id;
     }
-    public Usuario verificarUsuario(Connection connection, int pass, String user){
+    public UsuarioX verificarUsuario(Connection connection, int pass, String user){
         String nom="";
         double sald=0;
         int id=0;
@@ -35,12 +35,12 @@ public class Usuario {
                 id = resultSet.getInt("id");
                 nom = resultSet.getString("nombre");
                 sald = resultSet.getDouble("saldo");
-                return new Usuario(user,nom,pass,sald,id);
+                return new UsuarioX(user,nom,pass,sald,id);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new Usuario(null,null,0,0,0);
+        return new UsuarioX(null,null,0,0,0);
     }
     public void consultarSaldo(Connection connection, double monto){
         String query = "SELECT saldo FROM usuarios WHERE id = ?";

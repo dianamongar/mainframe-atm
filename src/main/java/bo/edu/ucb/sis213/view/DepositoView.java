@@ -1,9 +1,12 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.view;
 
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import bo.edu.ucb.sis213.bl.UsuarioBl;
+
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
@@ -16,14 +19,13 @@ import java.awt.Color;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 
-public class Deposito extends JFrame {
+public class DepositoView extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField cant_depositada;
 
-	public Deposito(Connection connection, Usuario usuario) {
+	public DepositoView(UsuarioBl usuarioBl) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 355);
 		contentPane = new JPanel();
@@ -68,7 +70,7 @@ public class Deposito extends JFrame {
 			@Override
             public void actionPerformed(ActionEvent e) {
 				dispose();
-				MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
+				MenuPrincipalView menuPrincipalFrame = new MenuPrincipalView(usuarioBl);
 				menuPrincipalFrame.setVisible(true);
             }
 		});
@@ -83,30 +85,20 @@ public class Deposito extends JFrame {
 			double mon=0;
 			@Override
             public void actionPerformed(ActionEvent e) {
-				if(cant_depositada.getText()!=null){
-					mon= Double.parseDouble(cant_depositada.getText());
-					if(mon>0){
-						if(usuario.depositar(connection, mon)){
-						JOptionPane.showMessageDialog(null, "Depósito realizado con éxito!"+"su saldo actual es: "+usuario.saldo);
-						dispose();
-						MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
-						menuPrincipalFrame.setVisible(true);
-						
-						}else{
-							JOptionPane.showMessageDialog(null, "No se pudo realizar el depósito :(");
-						}
-					}else{
-						JOptionPane.showMessageDialog(null, "Cantidad no válida :(");
-					}
+				mon= Double.parseDouble(cant_depositada.getText());
+				double resultado = usuarioBl.depositar(mon);
+				if(resultado==1){
+					JOptionPane.showMessageDialog(null, "Cantidad no válida :(");
+				}else if(resultado==3){
+					JOptionPane.showMessageDialog(null, "No se pudo realizar el depósito :(");
 				}else{
-					JOptionPane.showMessageDialog(null, "Ingrese cantidad a depositar.");
+					JOptionPane.showMessageDialog(null, "Depósito realizado con éxito!"+"su saldo actual es: "+resultado+" Bs.");
+					dispose();
+					MenuPrincipalView menuPrincipalFrame = new MenuPrincipalView(usuarioBl);
+					menuPrincipalFrame.setVisible(true);
 				}
-					
-					//depositoFrame.setVisible(true);
-				}
-			});
-		
-		
+			}
+		});
 		JSeparator separator_down = new JSeparator();
 		separator_down.setBounds(54, 279, 493, 13);
 		contentPane.add(separator_down);

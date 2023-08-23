@@ -68,7 +68,11 @@ mvn clean install
 ## Ejecución
 
 ```
-mvn exec:java -Dexec.mainClass="bo.edu.ucb.sis213.App"
+mvn exec:java -Dexec.mainClass="bo.edu.ucb.sis213.UserInterface"
+```
+Ejecute el programa con este comando:
+```
+mvn exec:java
 ```
 
 ## Instalación de la Base de Datos

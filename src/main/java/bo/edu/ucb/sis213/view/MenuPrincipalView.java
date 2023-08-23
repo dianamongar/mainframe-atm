@@ -1,13 +1,15 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.view;
 
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import bo.edu.ucb.sis213.bl.UsuarioBl;
+
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
@@ -15,11 +17,11 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
 
-public class MenuPrincipal extends JFrame {
+public class MenuPrincipalView extends JFrame {
 
 	private JPanel contentPane;
 
-	public MenuPrincipal(Connection connection, Usuario usuario) {
+	public MenuPrincipalView(UsuarioBl usuarioBl) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 355);
 		contentPane = new JPanel();
@@ -45,9 +47,9 @@ public class MenuPrincipal extends JFrame {
         btnDeposito.addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(ActionEvent e) {
-					dispose();
-					Deposito depositoFrame = new Deposito(connection, usuario);
-					depositoFrame.setVisible(true);
+				dispose();
+				DepositoView depositoFrame = new DepositoView(usuarioBl);
+				depositoFrame.setVisible(true);
             }
 		});
 
@@ -61,7 +63,7 @@ public class MenuPrincipal extends JFrame {
 			@Override
             public void actionPerformed(ActionEvent e) {
 					dispose();
-					Consulta consultaFrame = new Consulta(connection,usuario);
+					ConsultaView consultaFrame = new ConsultaView(usuarioBl);
 				    consultaFrame.setVisible(true);
             }
 		});
@@ -75,7 +77,7 @@ public class MenuPrincipal extends JFrame {
 			@Override
             public void actionPerformed(ActionEvent e) {
 				dispose();
-					ConfirmacionPassword confPasswordFrame = new ConfirmacionPassword(connection, usuario);
+					ConfirmacionPasswordView confPasswordFrame = new ConfirmacionPasswordView(usuarioBl);
 					confPasswordFrame.setVisible(true);
             }
 		});
@@ -89,7 +91,7 @@ public class MenuPrincipal extends JFrame {
 			@Override
             public void actionPerformed(ActionEvent e) {
 				dispose();
-					Retiro retiroFrame = new Retiro(usuario, connection);
+					RetiroView retiroFrame = new RetiroView(usuarioBl);
 					retiroFrame.setVisible(true);
             }
 		});
@@ -103,7 +105,7 @@ public class MenuPrincipal extends JFrame {
 			@Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-				Login loginFrame = new Login(connection);
+				LoginView loginFrame = new LoginView();
 				loginFrame.setVisible(true);
             }
 		});

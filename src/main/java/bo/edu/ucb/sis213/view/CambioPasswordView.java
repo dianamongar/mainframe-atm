@@ -1,9 +1,12 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.view;
 
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import bo.edu.ucb.sis213.bl.UsuarioBl;
+
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
@@ -16,15 +19,14 @@ import java.awt.Color;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 
-public class CambioPassword extends JFrame {
+public class CambioPasswordView extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField nuevo_pass;
 	private JTextField confir_pass;
 
-	public CambioPassword(Connection connection, Usuario usuario) {
+	public CambioPasswordView(UsuarioBl usuarioBl) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 355);
 		contentPane = new JPanel();
@@ -74,7 +76,7 @@ public class CambioPassword extends JFrame {
 			@Override
             public void actionPerformed(ActionEvent e) {
 				dispose();
-				MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
+				MenuPrincipalView menuPrincipalFrame = new MenuPrincipalView(usuarioBl);
 				menuPrincipalFrame.setVisible(true);
             }
 		});
@@ -100,26 +102,21 @@ public class CambioPassword extends JFrame {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				int contra, contraconf;
-				if(nuevo_pass.getText()!=null && confir_pass.getText()!=null){
-					contra = Integer.parseInt(nuevo_pass.getText());
-					contraconf = Integer.parseInt(confir_pass.getText());
-					int res = usuario.cambiarPassword(connection, contra, contraconf);
-					if(res == 1){
-						JOptionPane.showMessageDialog(null, "Se ha cambiado correctamente su password.");
-						dispose();
-						MenuPrincipal menuPrincipalFrame = new MenuPrincipal(connection, usuario);
-						menuPrincipalFrame.setVisible(true);
-					}else{
-						if(res == 2){
-							JOptionPane.showMessageDialog(null, "No se pudo realizar el cambio de password.");
-						}else{
-							JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden :(");
-						}
-						
-					}
-				}else{
-					JOptionPane.showMessageDialog(null, "Complete los campos.");
+				int contra=0, contraconf=0;
+				contra = Integer.parseInt(nuevo_pass.getText());
+				contraconf = Integer.parseInt(confir_pass.getText());
+				int resCambio = usuarioBl.cambiarPassword(contra, contraconf);
+				if(resCambio==1){
+					JOptionPane.showMessageDialog(null, "Ingrese su contraseña.");
+				}else if(resCambio==2){
+					JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden.");
+				}else if(resCambio==3){
+					JOptionPane.showMessageDialog(null, "No se pudo cambiar el pin.");
+				}else if(resCambio==4){
+					JOptionPane.showMessageDialog(null, "Se cambió las contraseñas con éxito.");
+					dispose();
+					MenuPrincipalView menuPrincipalFrame = new MenuPrincipalView(usuarioBl);
+					menuPrincipalFrame.setVisible(true);
 				}
                 
                 
